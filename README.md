@@ -1,33 +1,17 @@
 # Pocket Chat 1.1 — Android 4.4+
 
-A small native Java chat client for Ollama on your PC, OpenAI, Claude, Gemini,
+An entirely vibe coded small native Java chat client for Ollama on your PC, OpenAI, Claude, Gemini,
 and other HTTPS services implementing OpenAI Chat Completions. No ads, analytics,
 WebView, Google Play Services, or third-party runtime SDKs.
 
-## Update from 1.0
-
-Install the new APK over the existing app. Package ID and signing certificate are
-unchanged, and the version code increases from 1 to 2. Saved chats, settings and
-remembered keys remain. Do not uninstall first.
-
-Version 1.1 streams live text from Ollama, OpenAI, Claude, Gemini and compatible
-SSE servers. Before the first text arrives, an animated status and elapsed timer
-show that the request is active. Model loading/prompt processing can still take
-time before a server produces the first token. No artificial typing delay is added.
-
 ## Install
 
-1. Copy `PocketChat.apk` to the phone and open it. On Android 4.4, enable
+1. Copy `PocketChat.apk` to the phone and open it. Enable
    **Settings → Security → Unknown sources** to allow installation, then disable
    that setting again when finished.
 2. Open **Pocket Chat**, select a provider, and tap **Settings**.
 3. Set the base URL and API key, tap **Find models**, and select a text-chat model.
    You can also type an exact model ID. Tap **Save** and send a message.
-
-This is a development-signed, sideloadable APK, not a Play Store release.
-It has been compiled and signature-verified, but not run on a real Android 4.4
-phone or tested against paid provider accounts. Hardware-specific networking and
-provider/account access still need real-device testing.
 
 ## Connect Ollama on your PC
 
@@ -68,7 +52,7 @@ relaunch Ollama.
 
 In Pocket Chat select **Ollama**, replace the example address with
 `http://YOUR_PC_IP:11434`, leave the key blank, and tap **Find models**. Do not
-enter `localhost`: on the phone, that refers to the phone itself.
+enter `localhost`: on the phone.
 
 Use the same trusted LAN/Wi-Fi. Guest networks can prevent devices from talking
 to each other. HTTP Ollama traffic is unencrypted and its local server normally
@@ -84,12 +68,6 @@ has no authentication; limit firewall access to your LAN and do not port-forward
 | Claude | `https://api.anthropic.com/v1` | Claude API key, credit and a Messages-compatible model |
 | Gemini | `https://generativelanguage.googleapis.com/v1beta` | Google AI Studio API key and a generateContent model |
 | OpenAI-compatible | Your service's HTTPS API base, often ending in `/v1` | Service-specific key and model |
-
-Ollama local inference has no per-request API fee. Gemini offers a limited free
-API tier on eligible models/accounts; not every model in the list is free.
-OpenAI and Claude API use generally requires paid API credit. Chat subscriptions
-are separate from API billing. This app cannot unlock paid APIs for free.
-Check the provider console for current access, limits, data terms and pricing.
 
 Keys: https://platform.openai.com/api-keys · https://platform.claude.com/ ·
 https://aistudio.google.com/apikey
@@ -203,3 +181,4 @@ See `VALIDATION.md` for what was and was not verified.
 
 App source is MIT licensed; see LICENSE. The unmodified Mozilla CA bundle is
 separately licensed under MPL 2.0; see MOZILLA-LICENSE.txt and THIRD-PARTY.md.
+

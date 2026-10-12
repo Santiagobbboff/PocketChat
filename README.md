@@ -1,4 +1,8 @@
-# Pocket Chat 1.1 — Android 4.4+
+<img width="480" height="800" alt="providers" src="https://github.com/user-attachments/assets/3f853f90-4eea-42a6-9092-4619f1d09c1f" />
+<img width="480" height="800" alt="chat" src="https://github.com/user-attachments/assets/410e7208-9f32-4a9d-b5d1-93a5da1bc05e" />
+
+
+# Pocket Chat — Android 4.4+
 
 An entirely vibe coded small native Java chat client for Ollama on your PC, OpenAI, Claude, Gemini,
 and other HTTPS services implementing OpenAI Chat Completions. No ads, analytics,
@@ -89,11 +93,9 @@ https://aistudio.google.com/apikey
 - Messages are limited to 32,000 characters; replies exceeding 64,000 characters
   are visibly truncated and the stream is closed. Ordinary JSON responses are bounded
   at 2 MiB; streams have an 8 MiB character traffic limit and 256 KiB event/line limits.
-- Chat history is saved in private app storage. No Android/cloud backup is allowed.
-  Clear a provider with New chat, or clear Android app data to remove everything.
 - Keys stay in process memory by default and must be reentered after the process
   ends. “Remember key” saves the key in private preferences **without additional
-  encryption**. Do not enable it on a shared, rooted or untrusted phone.
+  encryption**. Do not enable it on a shared or untrusted phone.
 - Messages and recent context are sent directly to the selected API endpoint.
   There is no app developer backend. Custom endpoints receive whatever key and
   text you enter for that provider.

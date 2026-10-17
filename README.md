@@ -1,21 +1,10 @@
-# Pocket Chat 1.2 — Android 4.4+
+# Pocket Chat — Android 4.4+
 
 A small native Java chat client for Ollama on your PC, OpenAI, Claude, Gemini,
 and other HTTPS services implementing OpenAI Chat Completions. No ads, analytics,
 WebView, Google Play Services, or third-party runtime SDKs.
 
-## Update from 1.0 or 1.1
-
-Install the new APK over the existing app. Package ID and signing certificate are
-unchanged, and the version code is now 3. Saved chats, settings and
-remembered keys remain. Do not uninstall first.
-
-Version 1.1 streams live text from Ollama, OpenAI, Claude, Gemini and compatible
-SSE servers. Before the first text arrives, an animated status and elapsed timer
-show that the request is active. Model loading/prompt processing can still take
-time before a server produces the first token. No artificial typing delay is added.
-
-## New in 1.2: attachments and thinking effort
+## New in 1.1: attachments and thinking effort
 
 Tap **Attach file** to use the Android document picker. You can select an image, PDF, or UTF-8 text/code file; repeat to add up to four files. Tap an attachment in the composer to remove it. Send with your own prompt, or send attachments alone with the default review prompt.
 
@@ -52,17 +41,11 @@ Provider references checked for this implementation:
 
 ## Install
 
-1. Copy `PocketChat.apk` to the phone and open it. On Android 4.4, enable
-   **Settings → Security → Unknown sources** to allow installation, then disable
-   that setting again when finished.
+1. Copy `PocketChat.apk` to the phone and open it. Enable
+   **Settings → Security → Install from Unknown sources** to allow installation.
 2. Open **Pocket Chat**, select a provider, and tap **Settings**.
 3. Set the base URL and API key, tap **Find models**, and select a text-chat model.
    You can also type an exact model ID. Tap **Save** and send a message.
-
-This is a development-signed, sideloadable APK, not a Play Store release.
-It has been compiled and signature-verified, but not run on a real Android 4.4
-phone or tested against paid provider accounts. Hardware-specific networking and
-provider/account access still need real-device testing.
 
 ## Connect Ollama on your PC
 

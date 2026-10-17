@@ -1,21 +1,68 @@
-<img width="480" height="800" alt="providers" src="https://github.com/user-attachments/assets/3f853f90-4eea-42a6-9092-4619f1d09c1f" />
-<img width="480" height="800" alt="chat" src="https://github.com/user-attachments/assets/410e7208-9f32-4a9d-b5d1-93a5da1bc05e" />
+# Pocket Chat 1.2 — Android 4.4+
 
-
-# Pocket Chat — Android 4.4+
-
-An entirely vibe coded small native Java chat client for Ollama on your PC, OpenAI, Claude, Gemini,
+A small native Java chat client for Ollama on your PC, OpenAI, Claude, Gemini,
 and other HTTPS services implementing OpenAI Chat Completions. No ads, analytics,
 WebView, Google Play Services, or third-party runtime SDKs.
 
+## Update from 1.0 or 1.1
+
+Install the new APK over the existing app. Package ID and signing certificate are
+unchanged, and the version code is now 3. Saved chats, settings and
+remembered keys remain. Do not uninstall first.
+
+Version 1.1 streams live text from Ollama, OpenAI, Claude, Gemini and compatible
+SSE servers. Before the first text arrives, an animated status and elapsed timer
+show that the request is active. Model loading/prompt processing can still take
+time before a server produces the first token. No artificial typing delay is added.
+
+## New in 1.2: attachments and thinking effort
+
+Tap **Attach file** to use the Android document picker. You can select an image, PDF, or UTF-8 text/code file; repeat to add up to four files. Tap an attachment in the composer to remove it. Send with your own prompt, or send attachments alone with the default review prompt.
+
+Image thumbnails appear in both the composer and saved user messages. Tap a chat-log image to enlarge its preview. Imports are private copies inside the app: moving the original file does not break the saved image. Attachments remain in subsequent conversation context. New chat, trimmed history, and removal of unused drafts clean up unreferenced copies. No broad storage permission is needed because the document picker grants access to selected files.
+
+Limits keep the app usable on older phones:
+
+- Images: JPEG/PNG/WebP/GIF/BMP only when the device decoder supports them. Up to 8 MiB on import, downsampled to at most 1280 pixels on the longest side and sent as JPEG. EXIF orientation is applied. Transparency is composited onto white; animated images send the decoded frame, not an animation. HEIC is not supported by Android 4.4's decoder.
+- PDF: up to 2 MiB each. Sent as a document to OpenAI, Claude, Gemini, or compatible services that implement PDF input. Ollama raw PDF input is rejected locally; use a text export or page images there.
+- Text/code: UTF-8, up to 256 KiB each, inserted as labeled text. Office documents, audio, video, and archives are not supported; export Office files to PDF or text.
+- At most four attachments per message and 4 MiB of attachment bytes across the request's retained history. Start a new chat if that context limit is reached.
+- Image analysis requires a vision-capable model. File formats accepted by the client are not a guarantee that every selected model supports them.
+
+The **Thinking** button opens a compact effort selector. **Default** omits the control entirely, keeping the provider's normal behavior. Explicit settings require a compatible model/API and can increase output-token usage and response time. If the API rejects a level, switch to Default or select a supported model. The app does not automatically retry paid requests.
+
+| Provider | Controls sent |
+| --- | --- |
+| Ollama | Default, On/Off as booleans, or Low/Medium/High as named `think` levels. Named levels and disabling depend on the model/server. |
+| OpenAI / compatible | Default or `reasoning_effort` Low/Medium/High. Compatible endpoints may not implement this parameter. |
+| Claude | Low/Medium/High: token budgets 1024/4096/8192 for legacy thinking models; adaptive thinking plus effort for recognized Claude 4.6+ model IDs. Answer space is added to the output limit. Custom aliases may need Default. |
+| Gemini | Default, Low, High. Gemini 2.5 uses thinking budgets; newer model IDs use thinking levels. |
+
+Thinking status is shown while streaming; this does not add a reasoning-transcript viewer.
+
+Provider references checked for this implementation:
+- https://docs.ollama.com/api/chat
+- https://developers.openai.com/api/docs/guides/file-inputs
+- https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create
+- https://platform.claude.com/docs/en/build-with-claude/vision
+- https://platform.claude.com/docs/en/build-with-claude/pdf-support
+- https://platform.claude.com/docs/en/build-with-claude/extended-thinking
+- https://ai.google.dev/gemini-api/docs/generate-content/thinking
+- https://ai.google.dev/gemini-api/docs/document-processing
+
 ## Install
 
-1. Copy `PocketChat.apk` to the phone and open it. Enable
+1. Copy `PocketChat.apk` to the phone and open it. On Android 4.4, enable
    **Settings → Security → Unknown sources** to allow installation, then disable
    that setting again when finished.
 2. Open **Pocket Chat**, select a provider, and tap **Settings**.
 3. Set the base URL and API key, tap **Find models**, and select a text-chat model.
    You can also type an exact model ID. Tap **Save** and send a message.
+
+This is a development-signed, sideloadable APK, not a Play Store release.
+It has been compiled and signature-verified, but not run on a real Android 4.4
+phone or tested against paid provider accounts. Hardware-specific networking and
+provider/account access still need real-device testing.
 
 ## Connect Ollama on your PC
 
@@ -56,7 +103,7 @@ relaunch Ollama.
 
 In Pocket Chat select **Ollama**, replace the example address with
 `http://YOUR_PC_IP:11434`, leave the key blank, and tap **Find models**. Do not
-enter `localhost`: on the phone.
+enter `localhost`: on the phone, that refers to the phone itself.
 
 Use the same trusted LAN/Wi-Fi. Guest networks can prevent devices from talking
 to each other. HTTP Ollama traffic is unencrypted and its local server normally
@@ -73,6 +120,12 @@ has no authentication; limit firewall access to your LAN and do not port-forward
 | Gemini | `https://generativelanguage.googleapis.com/v1beta` | Google AI Studio API key and a generateContent model |
 | OpenAI-compatible | Your service's HTTPS API base, often ending in `/v1` | Service-specific key and model |
 
+Ollama local inference has no per-request API fee. Gemini offers a limited free
+API tier on eligible models/accounts; not every model in the list is free.
+OpenAI and Claude API use generally requires paid API credit. Chat subscriptions
+are separate from API billing. This app cannot unlock paid APIs for free.
+Check the provider console for current access, limits, data terms and pricing.
+
 Keys: https://platform.openai.com/api-keys · https://platform.claude.com/ ·
 https://aistudio.google.com/apikey
 
@@ -81,7 +134,7 @@ https://aistudio.google.com/apikey
 - Text chat streams into the reply bubble as it is generated. UI updates are batched
   at up to 20 times per second to keep old phones responsive. Auto-scroll follows
   while you are near the bottom; scroll up to read earlier messages during generation.
-- Text only: no images, voice, tools, markdown renderer or background chat service.
+- Supports image, PDF, and text/code inputs as described above. No voice input, tools, markdown renderer, generated-image output, or background chat service.
 - Ollama uses newline-delimited JSON; the cloud providers use server-sent events.
   Compatible servers that ignore streaming and return ordinary JSON still work,
   but their answers appear all at once. There is no automatic retry/fallback request.
@@ -93,9 +146,11 @@ https://aistudio.google.com/apikey
 - Messages are limited to 32,000 characters; replies exceeding 64,000 characters
   are visibly truncated and the stream is closed. Ordinary JSON responses are bounded
   at 2 MiB; streams have an 8 MiB character traffic limit and 256 KiB event/line limits.
+- Chat history is saved in private app storage. No Android/cloud backup is allowed.
+  Clear a provider with New chat, or clear Android app data to remove everything.
 - Keys stay in process memory by default and must be reentered after the process
   ends. “Remember key” saves the key in private preferences **without additional
-  encryption**. Do not enable it on a shared or untrusted phone.
+  encryption**. Do not enable it on a shared, rooted or untrusted phone.
 - Messages and recent context are sent directly to the selected API endpoint.
   There is no app developer backend. Custom endpoints receive whatever key and
   text you enter for that provider.
@@ -161,9 +216,10 @@ quota errors, secret redaction, and redirect refusal. No real keys are needed.
 mkdir -p test-build
 javac -cp /path/to/json-20240303.jar -d test-build \
   app/src/main/java/dev/pocketchat/Api.java \
-  app/src/main/java/dev/pocketchat/ReplyStream.java tests/ApiTest.java tests/StreamingTest.java
+  app/src/main/java/dev/pocketchat/ReplyStream.java app/src/main/java/dev/pocketchat/MessagePayload.java tests/ApiTest.java tests/StreamingTest.java tests/AttachmentPayloadTest.java
 java -cp /path/to/json-20240303.jar:test-build dev.pocketchat.ApiTest
 java -cp /path/to/json-20240303.jar:test-build dev.pocketchat.StreamingTest
+java -cp /path/to/json-20240303.jar:test-build dev.pocketchat.AttachmentPayloadTest
 ```
 
 The streaming test also verifies fragmented UTF-8, multiline SSE, interrupted
@@ -183,4 +239,3 @@ See `VALIDATION.md` for what was and was not verified.
 
 App source is MIT licensed; see LICENSE. The unmodified Mozilla CA bundle is
 separately licensed under MPL 2.0; see MOZILLA-LICENSE.txt and THIRD-PARTY.md.
-

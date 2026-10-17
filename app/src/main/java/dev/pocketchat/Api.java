@@ -14,8 +14,10 @@ public final class Api {
     public static final String[] BASES = {"http://192.168.1.100:11434", "https://api.openai.com/v1", "https://api.anthropic.com/v1", "https://generativelanguage.googleapis.com/v1beta", "https://example.com/v1"};
     public static final class Config {
         public final int provider;
-        public final String base, key, model;
-        public Config(int p, String b, String k, String m) {
+        public final String base, key, model, effort;
+        public Config(int p, String b, String k, String m) { this(p,b,k,m,"default"); }
+        public Config(int p, String b, String k, String m, String e) {
+            effort=e;
             provider=p; base=b.trim().replaceAll("/+$", ""); key=k.trim(); model=m.trim();
         }
         public void validate(boolean needsModel) throws Exception {
@@ -35,20 +37,17 @@ public final class Api {
     }
     public static Request chatRequest(Config c, JSONArray history) throws Exception {
         JSONObject body = new JSONObject();
-        if (c.provider==3) {
-            JSONArray contents = new JSONArray();
-            for (int i=0;i<history.length();i++) {
-                JSONObject m=history.getJSONObject(i);
-                contents.put(new JSONObject().put("role",m.getString("role").equals("assistant")?"model":"user")
-                    .put("parts",new JSONArray().put(new JSONObject().put("text",m.getString("content")))));
-            }
-            body.put("contents",contents).put("generationConfig",new JSONObject().put("maxOutputTokens",4096));
+        JSONArray converted=MessagePayload.messages(c.provider,history);
+        if(c.provider==3){
+            body.put("contents",converted).put("generationConfig",new JSONObject().put("maxOutputTokens",4096));
+            MessagePayload.effort(c,body);
             String model=c.model.startsWith("models/")?c.model.substring(7):c.model;
             return new Request("/models/"+URLEncoder.encode(model,"UTF-8")+":generateContent",body);
         }
-        body.put("model",c.model).put("messages",history).put("stream",false);
-        if (c.provider==2) body.put("max_tokens",4096);
-        if (c.provider==1) body.put("max_completion_tokens",4096);
+        body.put("model",c.model).put("messages",converted).put("stream",false);
+        if(c.provider==2)body.put("max_tokens",4096);
+        if(c.provider==1)body.put("max_completion_tokens",4096);
+        MessagePayload.effort(c,body);
         return new Request(c.provider==0?"/api/chat":c.provider==2?"/messages":"/chat/completions",body);
     }
     public static String chatText(int p, JSONObject response) throws Exception {

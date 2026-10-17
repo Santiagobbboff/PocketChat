@@ -1,3 +1,17 @@
+# Validation — v1.2, 2026-10-17
+
+- Built an installable APK with versionCode 3, versionName 1.2, minimum API 19.
+- Compiled all production Java sources independently against Android API 19.
+- APK v1/v2/v3 signatures verified. Signing certificate matches the existing PocketChat APK, permitting an in-place upgrade.
+- 32 adapter/mock-HTTP checks passed.
+- 37 streaming checks passed, including first-chunk delivery for all five provider formats.
+- 65 new attachment/effort checks passed: provider-specific image/PDF schemas, text files, metadata stripping, preserved history, Default omission, and provider-specific thinking fields and budgets.
+- Installed and ran on an Android 4.4 emulator. Nine instrumentation checks passed for content-provider import, EXIF rotation, bounded preview decoding, PDF import, oversized text rejection, UTF-8 text, base64 hydration, metadata-only persistence, and rendered ImageViews in both chat history and attachment composer. The test fixture provider is in the separate test APK only, not the released application.
+- No paid API calls were made. Real-model image/PDF acceptance, account permissions, and reasoning-level compatibility were not tested with user credentials. Unsupported model features can still return API errors; Default avoids sending explicit thinking fields.
+- Not tested on the user's physical phone. This release does not include HEIC decoding, Office parsing, audio/video inputs, or generated-image outputs.
+
+## Previous validation
+
 # Validation — v1.1, 2026-10-12
 
 - Built installable APK using JDK 17, Android SDK platform 35, build-tools 35.0.0,
